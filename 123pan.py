@@ -14,6 +14,7 @@ def open_request(path, data, token):
         'Platform': 'open_platform',
         'Authorization': 'Bearer ' + token
     }
+    time.sleep(1)
     response = requests.post(url, data=data, headers=headers, verify=False)
     res = response.json()
     if not res.get('code') == 0:
