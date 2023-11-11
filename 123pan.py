@@ -14,6 +14,15 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+def calculate_md5(file_path, chunk_size=8192):
+    md5_hash = hashlib.md5()
+
+    with open(file_path, 'rb') as file:
+        while chunk := file.read(chunk_size):
+            md5_hash.update(chunk)
+
+    return md5_hash.hexdigest()
+    
 def open_request(path, data, token):
     url = 'https://open-api.123pan.com' + path
     headers = {
@@ -142,4 +151,5 @@ client_id = ''  # 用户申请到的clientID
 client_secret = ''  # 用户申请到的clientSecret
 parent_file_id = 0  # 上传到的父级目录id，根目录为0
 local_file_path = sys.argv[1]  # 用户本地的文件绝对路径
+file_etag = calculate_md5(local_file_path)
 upload_file_with_retry(client_id, client_secret, parent_file_id, local_file_path)
